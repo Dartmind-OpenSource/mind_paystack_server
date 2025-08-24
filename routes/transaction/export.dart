@@ -12,7 +12,7 @@ Future<Response> _exportTransactions(RequestContext context) async {
   try {
     final body = await context.request.json() as Map<String, dynamic>;
 
-    final sdk = MindPaystack.instance;
+    final sdk = await context.read<Future<MindPaystack>>();
     final options = ExportTransactionsOptions(
       perPage: body['per_page'] as int?,
       page: body['page'] as int?,
