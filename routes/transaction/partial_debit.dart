@@ -11,27 +11,28 @@ Future<Response> onRequest(RequestContext context) async {
 
 Future<Response> _partialDebit(RequestContext context) async {
   try {
-    final body = await context.request.json();
-    
+    final body = await context.request.json() as Map<String, dynamic>;
+
     final authorizationCode = body['authorization_code'] as String?;
     final currency = body['currency'] as String?;
     final amount = body['amount'] as String?;
     final email = body['email'] as String?;
-    
-    if (authorizationCode == null || 
-        currency == null || 
-        amount == null || 
+
+    if (authorizationCode == null ||
+        currency == null ||
+        amount == null ||
         email == null) {
       return Response.json(
         statusCode: 400,
         body: {
           'status': false,
-          'message': 'Missing required fields: authorization_code, currency, amount, email',
+          'message':
+              'Missing required fields: authorization_code, currency, amount, email',
         },
       );
     }
-    
-    final sdk = MindPaystack.instance;
+
+    final sdk = await context.read<Future<MindPaystack>>();
     final options = PartialDebitOptions(
       authorizationCode: authorizationCode,
       currency: currency,
@@ -40,15 +41,14 @@ Future<Response> _partialDebit(RequestContext context) async {
       reference: body['reference'] as String?,
       atLeast: body['at_least'] as String?,
     );
-    
+
     final result = await sdk.transaction.partialDebit(options);
-    
+
     // SDK's built-in serialization
     return Response.json(
       statusCode: result.status ? 200 : 400,
       body: result.toJson(),
     );
-    
   } on MindException catch (e) {
     // SDK's comprehensive error handling
     return Response.json(
