@@ -8,8 +8,8 @@ environment:
 
 dependencies:
   dart_frog: ^1.1.0
-  mind_paystack:
-  dotenv: ^4.2.0
+  mind_paystack: ^0.1.2
+  dotenv:
 
 dev_dependencies:
   dart_frog_lint: ^0.1.0
