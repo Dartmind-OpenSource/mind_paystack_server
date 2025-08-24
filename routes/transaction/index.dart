@@ -23,13 +23,13 @@ Future<Response> _initializeTransaction(RequestContext context) async {
       metadata: body['metadata'] as Map<String, dynamic>?,
     );
 
-    final sdk = MindPaystack.instance;
+    final sdk = await context.read<Future<MindPaystack>>();
     final result = await sdk.transaction.initialize(options);
 
     // Use SDK's perfect serialization
     return Response.json(
       statusCode: result.status ? 200 : 400,
-      body: result.toJson(),
+      body: result.toMap(),
     );
   } on MindException catch (e) {
     // SDK's comprehensive error handling
