@@ -11,15 +11,14 @@ Future<Response> onRequest(RequestContext context) async {
 Future<Response> _getTransactionTotals(RequestContext context) async {
   try {
     // No parameters needed - SDK handles everything
-    final sdk = MindPaystack.instance;
+    final sdk = await context.read<Future<MindPaystack>>();
     final result = await sdk.transaction.totals();
-    
+
     // SDK's built-in serialization with complete totals data
     return Response.json(
       statusCode: result.status ? 200 : 400,
       body: result.toJson(),
     );
-    
   } on MindException catch (e) {
     // SDK's comprehensive error handling
     return Response.json(
