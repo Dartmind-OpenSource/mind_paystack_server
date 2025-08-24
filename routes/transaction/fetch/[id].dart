@@ -22,16 +22,15 @@ Future<Response> _fetchTransaction(RequestContext context, String id) async {
         },
       );
     }
-    
-    final sdk = MindPaystack.instance;
+
+    final sdk = await context.read<Future<MindPaystack>>();
     final result = await sdk.transaction.fetch(transactionId);
-    
+
     // SDK's built-in serialization
     return Response.json(
       statusCode: result.status ? 200 : 400,
       body: result.toJson(),
     );
-    
   } on MindException catch (e) {
     // SDK's comprehensive error handling
     return Response.json(
