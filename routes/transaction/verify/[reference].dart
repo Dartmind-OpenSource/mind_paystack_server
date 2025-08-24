@@ -14,15 +14,14 @@ Future<Response> _verifyTransaction(
 ) async {
   try {
     // SDK handles all validation internally - no need for manual checks!
-    final sdk = MindPaystack.instance;
+    final sdk = await context.read<Future<MindPaystack>>();
     final result = await sdk.transaction.verify(reference);
-    
+
     // SDK's built-in serialization handles everything perfectly
     return Response.json(
       statusCode: result.status ? 200 : 400,
       body: result.toJson(),
     );
-    
   } on MindException catch (e) {
     // SDK's comprehensive error details with validation, codes, etc.
     return Response.json(
