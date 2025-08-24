@@ -14,15 +14,14 @@ Future<Response> _getTransactionTimeline(
 ) async {
   try {
     // SDK handles all validation - just pass the reference
-    final sdk = MindPaystack.instance;
+    final sdk = await context.read<Future<MindPaystack>>();
     final result = await sdk.transaction.timeline(reference);
-    
+
     // SDK's built-in serialization with perfect timeline data
     return Response.json(
       statusCode: result.status ? 200 : 400,
       body: result.toJson(),
     );
-    
   } on MindException catch (e) {
     // SDK's comprehensive error handling
     return Response.json(
