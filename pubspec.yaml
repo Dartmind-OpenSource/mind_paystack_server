@@ -8,7 +8,7 @@ environment:
 
 dependencies:
   dart_frog: ^1.1.0
-  mind_paystack: ^0.1.2
+  mind_paystack: ^0.1.2+1
   dotenv:
 
 dev_dependencies:
